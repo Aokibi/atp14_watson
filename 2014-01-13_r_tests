@@ -39,7 +39,6 @@ predict(pca)[1:2,]
 iris2 = transform(iris, ratio=round(Sepal.Length/Sepal.Width, 2))
 head(iris2)
 
-
 segments = 10
 maxL = max(iris$Petal.Length)
 minL = min(iris$Petal.Length)
@@ -77,10 +76,6 @@ joinCO2 = merge(CO2,geomap,by=c('Type'))
 join joinCO2 <- merge(CO2, geomap, by=c('Type'))
 head(joinCO2)
 
-
-
-
-
 library(rpart)
 #Train the decision tree
 treemodel = rpart(Species~., data=iris)
@@ -98,11 +93,6 @@ model <- randomForest(Species~., data=iris, nTree=500)
 prediction <- predict(model, newdata=iris, type='class')
 table(prediction, iris$Species)
 importance(model)
-
-
-
-
-
 
 
 
