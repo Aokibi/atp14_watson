@@ -114,7 +114,6 @@ summary(learning)
 attach(learning)
 names(learning)
 
-
 newdata=read.csv(file=file.choose())
 dim(newdata)
 head(newdata)
@@ -122,10 +121,8 @@ summary(newdata)
 attach(newdata)
 names(newdata)
 
-
 testdata=read.csv(file=file.choose())
 attach(testdata)
-
 
 library(rpart)
 learningmodel = rpart(Object~., data=learning)
@@ -134,14 +131,11 @@ preds = predict(learningmodel, testdata, type = c("prob"))
 barplot(preds)
 preds
 
-
-
 plot(learningmodel)
 text(learningmodel, use.n=T)
 prediction = predict(learningmodel, newdata=learning, type='class')
 table(prediction, learning$Object)
 predict(learningmodel)
-
 
 library(randomForest)
 model <- randomForest(Object~., data=learning, nTree=500)
