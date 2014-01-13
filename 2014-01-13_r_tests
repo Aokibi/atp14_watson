@@ -1,0 +1,154 @@
+##relevant code begins at line 110
+
+##qplot
+require('ggplot2')
+theme_set(theme_bw())
+qplot(A, B, data=ex1, color=C, size=D, shape=E) + addM(ex1,1) + addM(ex1,2)
+
+## ggpairs
+require('GGally')
+ggpairs(ex1, color='E')
+
+
+## iris example
+
+index = sample(1:nrow(iris),10,replace=T)
+index
+irissample = iris[index,]
+irissample
+irissample[10,1]=NA
+irissample
+
+library(e1071)
+fixIris1 = impute(irissample[,1:4], what='mean')
+fixIris1
+fixIris2 = impute(irissample[,1:4], what='median')
+fixIris2
+
+scaleiris = scale(iris[,1:4])
+head(scaleiris)
+
+##Principal Component Analysis
+cor(iris[, -5])
+pca = prcomp(iris[,-5], scale=T)
+summary(pca)
+plot(pca)
+pca$rotation
+predict(pca)[1:2,]
+
+iris2 = transform(iris, ratio=round(Sepal.Length/Sepal.Width, 2))
+head(iris2)
+
+
+segments = 10
+maxL = max(iris$Petal.Length)
+minL = min(iris$Petal.Length)
+theBreaks = seq(minL, maxL,by=(maxL-minL)/segments)
+cutPetalLength = cut(iris$Petal.Length,breaks=theBreaks,include.lowest=T)
+newdata = data.frame(orig.Petal.Len=iris$Petal.Length,cut.Petal.Len=cutPetalLength)
+head(newdata)
+myBreaks = quantile(iris$Petal.Length, probs=seq(0,1,1/segments))
+cutPetalLength2 <- cut(iris$Petal.Length,breaks=myBreaks,include.lowest=T)                    
+newdata2 <- data.frame(orig.Petal.Len=iris$Petal.Length,cut.Petal.Len=cutPetalLength2)
+head(newdata2)
+
+cat = levels(iris$Species)
+cat
+binarize <- function(x) {return(iris$Species == x)}
+newcols = sapply(cat,binarize)
+colnames(newcols) = cat
+data = cbind(iris[,c('Species')],newcols)
+data[45:55,]
+
+head(CO2)
+data = CO2[CO2$conc>400 & CO2$uptake>40,]
+head(data)
+CO2[order(CO2$conc, -CO2$uptake),][1:20,]
+aggregate(CO2[,c('uptake')], data.frame(CO2$Plant), mean)
+aggregate(CO2[,c('conc', 'uptake')],data.frame(CO2$Type, CO2$Treatment),mean)
+
+head(CO2)
+state = c('California', 'Mississippi', 'Fujian','Shandong', 'Quebec', 'Ontario')
+country = c('USA', 'USA', 'China', 'China','Canada', 'Canada')
+geomap = data.frame(country=country, state=state)
+geomap
+colnames(geomap) = c('country', 'Type')
+joinCO2 = merge(CO2,geomap,by=c('Type'))
+join joinCO2 <- merge(CO2, geomap, by=c('Type'))
+head(joinCO2)
+
+
+
+
+
+library(rpart)
+#Train the decision tree
+treemodel = rpart(Species~., data=iris)
+plot(treemodel)
+text(treemodel, use.n=T)
+#Predict using the decision tree
+prediction = predict(treemodel, newdata=iris, type='class')
+#Use contingency table to see how accurate it is
+table(prediction, iris$Species)
+
+head(iris)
+
+library(randomForest)
+model <- randomForest(Species~., data=iris, nTree=500)
+prediction <- predict(model, newdata=iris, type='class')
+table(prediction, iris$Species)
+importance(model)
+
+
+
+
+
+
+
+
+
+learning=read.csv(file=file.choose())
+dim(learning)
+head(learning)
+summary(learning)
+attach(learning)
+names(learning)
+
+
+newdata=read.csv(file=file.choose())
+dim(newdata)
+head(newdata)
+summary(newdata)
+attach(newdata)
+names(newdata)
+
+
+testdata=read.csv(file=file.choose())
+attach(testdata)
+
+
+library(rpart)
+learningmodel = rpart(Object~., data=learning)
+fitVariablesUsed = names(learningmodel)
+preds = predict(learningmodel, testdata, type = c("prob"))
+barplot(preds)
+preds
+
+
+
+plot(learningmodel)
+text(learningmodel, use.n=T)
+prediction = predict(learningmodel, newdata=learning, type='class')
+table(prediction, learning$Object)
+predict(learningmodel)
+
+
+library(randomForest)
+model <- randomForest(Object~., data=learning, nTree=500)
+prediction <- predict(model, newdata=learning, type='class')
+table(prediction, learning$Object)
+importance(model)
+
+library(randomForest)
+r = randomForest(Object~., data=learning, nTree=500)
+predict(r,testdata)
